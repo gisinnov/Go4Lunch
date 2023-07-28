@@ -23,6 +23,13 @@
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
+    <!-- MapFragment -->
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.example.go4lunch.ui.dashboard.DashboardFragment"
+        android:label="Map View"
+        tools:layout="@layout/fragment_dashboard" />
+
     <!-- DashboardFragment -->
     <fragment
         android:id="@+id/nav_dashboard"
