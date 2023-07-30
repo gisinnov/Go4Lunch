@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "400274979917",
+    "project_id": "realestatmanager",
+    "storage_bucket": "realestatmanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400274979917:android:f54121e6341fa4da17b004",
+        "android_client_info": {
+          "package_name": "com.example.go4lunch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400274979917-7re9f4b1oomud8cd0c7eq6gu1d77b9t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaA7gnZFhy-yYyBQqj2x8u4KxcudSlnr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400274979917-7re9f4b1oomud8cd0c7eq6gu1d77b9t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -12,6 +12,7 @@
     <string name="menu_slideshow">Logout</string>
 
     <!-- New strings for the BottomNavigationView menu items -->
+    <string name="menu_map">Map View</string>
     <string name="menu_dashboard">List View</string>
     <string name="menu_notifications">Notifications</string>
 </resources>

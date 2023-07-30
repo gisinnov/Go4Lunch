@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.go4lunch.databinding.FragmentMapBinding;
 import com.example.go4lunch.ui.map.MapViewModel;
 
-public class MapFragment extends Fragment {
 
+public class MapFragment extends Fragment {
     private FragmentMapBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -26,7 +26,7 @@ public class MapFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textMap;
-        MapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        mapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
@@ -36,3 +36,4 @@ public class MapFragment extends Fragment {
         binding = null;
     }
 }
+

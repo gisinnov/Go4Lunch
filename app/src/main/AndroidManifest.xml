@@ -18,25 +18,33 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.Go4Lunch.NoActionBar">
+        </activity>
+
+        <!-- Déclaration de SignUpActivity -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Déclaration de LoginActivity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Déclaration du DashboardFragment -->
+        <!-- Déclaration de ResetPasswordActivity -->
         <activity
-            android:name="com.example.go4lunch.ui.dashboard.DashboardFragment"
-            android:parentActivityName=".MainActivity" />
-
-        <!-- Déclaration du NotificationsFragment -->
-        <activity
-            android:name="com.example.go4lunch.ui.notifications.NotificationsFragment"
+            android:name=".ResetPasswordActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>
 
