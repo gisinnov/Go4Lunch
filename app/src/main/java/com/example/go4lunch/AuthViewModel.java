@@ -6,29 +6,54 @@ import androidx.lifecycle.ViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthViewModel extends ViewModel {
-    private final FirebaseAuth auth;
+
+    private FirebaseFirestore firestore;
 
     public AuthViewModel() {
         auth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
     }
 
-    public void register(String name, String email, String password) {
+    private final FirebaseAuth auth;
+
+
+    public void register(String firstName, String lastName, String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
+                                .setDisplayName(firstName + " " + lastName)
                                 .build();
 
                         user.updateProfile(profileUpdates);
+
+                        // Écrivez les données dans Firestore
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("firstName", firstName);
+                        userData.put("lastName", lastName);
+                        userData.put("email", email);
+
+                        firestore.collection("users").document(user.getUid())
+                                .set(userData)
+                                .addOnSuccessListener(documentReference -> {
+                                    // Écriture réussie
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Gestion de l'échec
+                                });
                     } else {
-                        // Handle failure
+                        // Gestion de l'échec
                     }
                 });
     }
+
 
     public void login(String email, String password) {
         auth.signInWithEmailAndPassword(email, password)

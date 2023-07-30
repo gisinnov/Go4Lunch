@@ -7,6 +7,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.databinding.ActivityLoginBinding;
 
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.content.Intent;
+
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private AuthViewModel viewModel;
@@ -24,6 +29,19 @@ public class LoginActivity extends AppCompatActivity {
             String password = binding.etPassword.getText().toString().trim();
             viewModel.login(email, password);
         });
+
+        // Set click listener for the "Forgot Password" text view
+        binding.tvForgotPassword.setOnClickListener(v -> {
+            // Start ResetPasswordActivity
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
+        });
+
+        // Set click listener for the "Create Account" text view
+        binding.tvCreateAccount.setOnClickListener(v -> {
+            // Start SignUpActivity
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
+        });
     }
 }
-

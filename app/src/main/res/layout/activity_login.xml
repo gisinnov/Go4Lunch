@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Email"
+            android:hint="@string/login_email_hint"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Password"
+            android:hint="@string/login_password_hint"
             android:inputType="textPassword" />
 
         <Button
@@ -38,9 +38,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/purple_500"
-            android:text="Login"
+            android:text="@string/login_button_text"
             android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Mot de passe oublié?"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvCreateAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Crée un compte"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"/>
+
 
     </LinearLayout>
 
-</ScrollView
+</ScrollView>
