@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.databinding.ActivitySignUpBinding;
-import com.example.go4lunch.Permissions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,11 +18,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private AuthViewModel viewModel;
     private FirebaseFirestore firestore;
+    private Uri imageUri; // Ajouté pour stocker l'URI de l'image
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private StorageReference storageRef;
@@ -43,7 +42,22 @@ public class SignUpActivity extends AppCompatActivity {
             String lastName = binding.etLastName.getText().toString().trim();
             String email = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString().trim();
+
             viewModel.register(firstName, lastName, email, password);
+            viewModel.getIsRegistrationSuccessful().observe(this, isSuccessful -> {
+                if (isSuccessful && imageUri != null) {
+                    String userId = viewModel.getCurrentUserId();
+                    viewModel.uploadProfilePicture(imageUri, userId);
+                }
+            });
+
+            viewModel.getIsImageUploadSuccessful().observe(this, isSuccessful -> {
+                if (isSuccessful) {
+                    Toast.makeText(SignUpActivity.this, "Image et utilisateur enregistrés avec succès", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Échec du téléchargement de l'image", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         binding.btnPickImage.setOnClickListener(v -> {
@@ -74,30 +88,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-
-            StorageReference imageRef = storageRef.child("images/" + imageUri.getLastPathSegment());
-
-            UploadTask uploadTask = imageRef.putFile(imageUri);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(SignUpActivity.this, "Image uploaded", Toast.LENGTH_SHORT).show();
-
-                    // Set the profileImage ImageView with the uploaded image
-                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Picasso.get().load(uri).into(binding.profileImage);
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(SignUpActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                }
-            });
+            imageUri = data.getData(); // Enregistrez l'URI de l'image pour une utilisation ultérieure
+            Picasso.get().load(imageUri).into(binding.profileImage); // Affichez l'image dans votre ImageView
         }
     }
 
