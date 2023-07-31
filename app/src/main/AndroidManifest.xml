@@ -15,6 +15,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,6 +28,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Go4Lunch"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC3p7ubjuEe9gMOtyPZvzyUSA5RlRZ0TGI"/>
 
         <activity
             android:name=".MainActivity"
@@ -61,6 +68,7 @@
             android:name=".ResetPasswordActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
