@@ -11,21 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.databinding.ActivitySignUpBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private AuthViewModel viewModel;
-    private FirebaseFirestore firestore;
     private Uri imageUri; // Ajouté pour stocker l'URI de l'image
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firestore = FirebaseFirestore.getInstance();
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        storageRef = FirebaseStorage.getInstance().getReference();
 
         binding.btnSignUp.setOnClickListener(v -> {
             String firstName = binding.etFirstName.getText().toString().trim();
