@@ -130,4 +130,5 @@ public class AuthViewModel extends ViewModel {
             }
         });
     }
+
 }
