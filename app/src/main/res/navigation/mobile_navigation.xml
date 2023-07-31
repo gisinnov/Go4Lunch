@@ -26,9 +26,9 @@
     <!-- MapFragment -->
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.example.go4lunch.ui.dashboard.DashboardFragment"
+        android:name="com.example.go4lunch.ui.map.MapFragment"
         android:label="Map View"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_map" />
 
     <!-- DashboardFragment -->
     <fragment
