@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -17,7 +16,6 @@ import android.net.Uri;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class AuthViewModel extends ViewModel {
 
@@ -26,6 +24,7 @@ public class AuthViewModel extends ViewModel {
     private final FirebaseStorage storage;
     private final MutableLiveData<Boolean> isRegistrationSuccessful = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isImageUploadSuccessful = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoginSuccessful = new MutableLiveData<>();
 
     public AuthViewModel() {
         auth = FirebaseAuth.getInstance();
@@ -39,6 +38,10 @@ public class AuthViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsImageUploadSuccessful() {
         return isImageUploadSuccessful;
+    }
+
+    public LiveData<Boolean> getIsLoginSuccessful() {
+        return isLoginSuccessful;
     }
 
     public String getCurrentUserId() {
@@ -58,7 +61,6 @@ public class AuthViewModel extends ViewModel {
                         assert user != null;
                         user.updateProfile(profileUpdates);
 
-                        // Write the data to Firestore
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("firstName", firstName);
                         userData.put("lastName", lastName);
@@ -82,9 +84,9 @@ public class AuthViewModel extends ViewModel {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Login successful
+                        isLoginSuccessful.postValue(true);
                     } else {
-                        // Handle failure
+                        isLoginSuccessful.postValue(false);
                     }
                 });
     }
@@ -106,14 +108,12 @@ public class AuthViewModel extends ViewModel {
         UploadTask uploadTask = imageRef.putFile(imageUri);
         uploadTask.continueWithTask(task -> {
             if (!task.isSuccessful()) {
-                throw Objects.requireNonNull(task.getException());
+                throw task.getException();
             }
-            // Continue with the task to get the download URL
             return imageRef.getDownloadUrl();
         }).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Uri downloadUri = task.getResult();
-                // Put download URL to Firestore
                 firestore.collection("users").document(userId)
                         .update("imageUrl", downloadUri.toString())
                         .addOnSuccessListener(aVoid -> isImageUploadSuccessful.postValue(true))
