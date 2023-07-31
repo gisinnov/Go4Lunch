@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.go4lunch.databinding.ActivityLoginBinding;
-
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private AuthViewModel viewModel;
@@ -25,6 +24,13 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString().trim();
+
+            // vérifie si l'email ou le mot de passe est vide
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Please fill out all fields!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             viewModel.login(email, password);
         });
 
@@ -42,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         binding.tvForgotPassword.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);

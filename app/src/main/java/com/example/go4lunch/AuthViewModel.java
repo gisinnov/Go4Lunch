@@ -49,6 +49,13 @@ public class AuthViewModel extends ViewModel {
         return user != null ? user.getUid() : null;
     }
 
+    // Getter pour obtenir le LiveData de l'utilisateur actuellement connecté
+    public FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+    // Méthode pour récupérer les données de l'utilisateur depuis Firebase Authentication
+
+
     public void register(String firstName, String lastName, String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {

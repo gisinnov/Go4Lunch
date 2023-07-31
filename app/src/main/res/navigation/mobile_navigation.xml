@@ -43,4 +43,11 @@
         android:name="com.example.go4lunch.ui.notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
+    <!-- UserActivity -->
+    <activity
+        android:id="@+id/nav_user"
+        android:name="com.example.go4lunch.UserActivity"
+        android:label="User" />
+
+
 </navigation>

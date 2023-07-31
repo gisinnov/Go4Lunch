@@ -51,6 +51,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.example.go4lunch.UserActivity"
+            android:label="User">
+        </activity>
+
         <!-- Déclaration de ResetPasswordActivity -->
         <activity
             android:name=".ResetPasswordActivity"
