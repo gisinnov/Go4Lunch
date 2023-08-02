@@ -1,4 +1,4 @@
-package com.example.go4lunch;
+package com.example.go4lunch.ui.user;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,8 +8,9 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
-import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import com.example.go4lunch.AuthViewModel;
+import com.example.go4lunch.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -19,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.example.go4lunch.databinding.ActivityUserBinding;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;

@@ -32,28 +32,22 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_user, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_map)
                 .setOpenableLayout(drawer)
                 .build();
 
-        // Navigation Controller pour la NavigationView
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Get the BottomNavigationView reference
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Navigation Controller pour le BottomNavigationView
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        // Ajouter un écouteur de clic pour le menu de navigation
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_logout) {
-                // Appeler la fonction de déconnexion ici
                 logoutUser();
                 return true;
             }
@@ -62,19 +56,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        // Ajoutez ici le code pour déconnecter l'utilisateur de votre application.
-        // Cela peut impliquer d'utiliser FirebaseAuth pour déconnecter l'utilisateur actuel.
-        // Voici comment vous pouvez le faire :
-
-        // FirebaseAuth.getInstance().signOut();
-
-        // Rediriger l'utilisateur vers l'écran de connexion ou une autre activité de départ si nécessaire.
-        // Par exemple, si vous avez une activité de connexion LoginActivity, vous pouvez faire ceci :
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        finish(); // Fermer MainActivity pour qu'il ne soit pas accessible en appuyant sur le bouton "Retour".
-
-        // Assurez-vous de mettre en place votre activité LoginActivity pour permettre à l'utilisateur de se connecter à nouveau.
+        finish();
     }
 
     @Override

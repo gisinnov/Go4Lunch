@@ -59,7 +59,7 @@
         </activity>
 
         <activity
-            android:name="com.example.go4lunch.UserActivity"
+            android:name="com.example.go4lunch.ui.user.UserActivity"
             android:label="User">
         </activity>
 

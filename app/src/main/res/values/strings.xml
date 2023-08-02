@@ -19,6 +19,8 @@
     <string name="menu_map">Map View</string>
     <string name="menu_dashboard">List View</string>
     <string name="menu_notifications">Notifications</string>
+    <string name="menu_workmates">Workmates</string>
+
 
     <!-- Login screen strings -->
     <string name="login_email_hint">Email</string>
