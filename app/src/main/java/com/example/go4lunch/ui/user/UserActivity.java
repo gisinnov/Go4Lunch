@@ -1,4 +1,5 @@
 package com.example.go4lunch.ui.user;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -113,6 +114,12 @@ public class UserActivity extends AppCompatActivity {
             EditText editLastName = findViewById(R.id.edit_last_name);
             String firstName = editFirstName.getText().toString();
             String lastName = editLastName.getText().toString();
+
+            // Après avoir mis à jour le profil de l'utilisateur dans la méthode saveUserData
+// Envoyez une diffusion pour notifier MainActivity de la mise à jour du profil
+            Intent intent = new Intent("com.example.go4lunch.PROFILE_UPDATED");
+            sendBroadcast(intent);
+
 
             // Mettre à jour le nom d'affichage de l'utilisateur
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
