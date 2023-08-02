@@ -6,15 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.map.MapFragment">
 
-
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:liteMode="true"
-        app:uiZoomControls="true" />
+        android:orientation="vertical">
 
+        <!-- Map View -->
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="visible" />
 
+        <!-- Add other UI elements if required -->
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

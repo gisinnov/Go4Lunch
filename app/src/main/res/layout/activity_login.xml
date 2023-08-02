@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:padding="12dp"
             android:hint="@string/login_email_hint"
             android:inputType="textEmailAddress" />
 
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:padding="12dp"
             android:hint="@string/login_password_hint"
             android:inputType="textPassword" />
 
@@ -47,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Mot de passe oublié?"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
@@ -56,8 +58,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Crée un compte"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_gravity="center_horizontal" />
+
+
 
 
     </LinearLayout>

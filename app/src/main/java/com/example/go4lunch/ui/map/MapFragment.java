@@ -16,11 +16,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FragmentMapBinding binding;
     private GoogleMap mMap;
+
+    private List<Marker> restaurantMarkers = new ArrayList<>();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MapViewModel mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
@@ -41,18 +48,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Cannes and move the camera
         LatLng cannes = new LatLng(43.5523, 7.0174);
-        float zoomLevel = 10.0f; // Adjust this value to control the level of zoom
+        mMap.addMarker(new MarkerOptions().position(cannes).title("Marker in Cannes"));
+
+        // Adjust this value to control the level of zoom and show a larger area
+        float zoomLevel = 18.0f;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cannes, zoomLevel));
 
+        // Sample restaurant positions
+        List<LatLng> restaurantPositions = getSampleRestaurantPositions();
 
-        // Define the bounds for the camera zoom
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(cannes);
-
-        // Set the camera position and zoom level
-        int padding = 100; // in pixels
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding));
+        // Loop through the restaurant positions and add markers for them
+        for (LatLng position : restaurantPositions) {
+            Marker marker = mMap.addMarker(new MarkerOptions().position(position).title("Restaurant Marker"));
+            restaurantMarkers.add(marker);
+        }
     }
+
+    // A method to return sample restaurant positions (Replace this with your actual data)
+    private List<LatLng> getSampleRestaurantPositions() {
+        List<LatLng> restaurantPositions = new ArrayList<>();
+
+        // Add sample restaurant positions (you can replace these with your actual data)
+        restaurantPositions.add(new LatLng(43.5560, 7.0150)); // Restaurant 1
+        restaurantPositions.add(new LatLng(43.5500, 7.0200)); // Restaurant 2
+        restaurantPositions.add(new LatLng(43.5530, 7.0180)); // Restaurant 3
+
+        return restaurantPositions;
+    }
+
+    // Method to remove all restaurant markers from the map
+    private void removeRestaurantMarkers() {
+        for (Marker marker : restaurantMarkers) {
+            marker.remove();
+        }
+        restaurantMarkers.clear();
+    }
+
 
     @Override
     public void onDestroyView() {
