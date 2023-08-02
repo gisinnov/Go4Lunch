@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,16 +15,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FragmentMapBinding binding;
     private GoogleMap mMap;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        MapViewModel mapViewModel =
-                new ViewModelProvider(this).get(MapViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MapViewModel mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -34,8 +32,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         binding.mapView.onCreate(savedInstanceState);
         binding.mapView.getMapAsync(this);
 
-        final TextView textView = binding.textMap;
-        mapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
@@ -45,8 +41,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Cannes and move the camera
         LatLng cannes = new LatLng(43.5523, 7.0174);
-        mMap.addMarker(new MarkerOptions().position(cannes).title("Marker in Cannes"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(cannes));
+        float zoomLevel = 10.0f; // Adjust this value to control the level of zoom
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cannes, zoomLevel));
+
+
+        // Define the bounds for the camera zoom
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(cannes);
+
+        // Set the camera position and zoom level
+        int padding = 100; // in pixels
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding));
     }
 
     @Override

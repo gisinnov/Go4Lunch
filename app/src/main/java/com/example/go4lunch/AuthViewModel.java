@@ -16,6 +16,7 @@ import android.net.Uri;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AuthViewModel extends ViewModel {
 
@@ -109,17 +110,20 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
+
+
+
     public void uploadProfilePicture(Uri imageUri, String userId) {
         StorageReference imageRef = storage.getReference().child("images/" + userId);
 
         UploadTask uploadTask = imageRef.putFile(imageUri);
         uploadTask.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw task.getException();
+            if (!task.isSuccessful() && task.getException() != null) {
+                throw Objects.requireNonNull(task.getException()); // Propager l'exception pour la gérer plus tard
             }
-            return imageRef.getDownloadUrl();
+            return imageRef.getDownloadUrl(); // Récupérer l'URL de téléchargement
         }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && task.getResult() != null) {
                 Uri downloadUri = task.getResult();
                 firestore.collection("users").document(userId)
                         .update("imageUrl", downloadUri.toString())
@@ -128,7 +132,8 @@ public class AuthViewModel extends ViewModel {
             } else {
                 isImageUploadSuccessful.postValue(false);
             }
+        }).addOnFailureListener(e -> {
+            isImageUploadSuccessful.postValue(false); // Gérer les échecs du téléchargement ici
         });
     }
-
 }

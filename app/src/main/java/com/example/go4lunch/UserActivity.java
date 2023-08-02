@@ -8,6 +8,13 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.example.go4lunch.databinding.ActivityUserBinding;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserActivity extends AppCompatActivity {
     private ActivityUserBinding binding;
@@ -38,6 +46,7 @@ public class UserActivity extends AppCompatActivity {
         btnSave.setOnClickListener(view -> saveUserData());
     }
 
+
     private void updateUI() {
         FirebaseUser user = viewModel.getCurrentUser();
 
@@ -56,7 +65,26 @@ public class UserActivity extends AppCompatActivity {
 
             // Afficher la photo de l'utilisateur
             ImageView profileImageView = findViewById(R.id.user_profile_image);
-            Glide.with(this).load(photoUrl).into(profileImageView);
+
+            // Récupérer l'URL de l'image de Firebase
+            String userId = user.getUid();
+            DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(userId);
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    String imageUrl = documentSnapshot.getString("imageUrl");
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(UserActivity.this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.user_null)
+                                .into(profileImageView);
+                    } else {
+                        Glide.with(UserActivity.this)
+                                .load(R.drawable.user_null)
+                                .into(profileImageView);
+                    }
+                }
+            });
 
             // Remplir les champs d'édition avec les valeurs actuelles du nom et du prénom
             EditText editFirstName = findViewById(R.id.edit_first_name);
@@ -65,6 +93,7 @@ public class UserActivity extends AppCompatActivity {
             editLastName.setText(getLastName(name));
         }
     }
+
 
     private String getFirstName(String fullName) {
         String[] nameParts = fullName.split(" ");
@@ -142,6 +171,7 @@ public class UserActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void showSuccessMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
