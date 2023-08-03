@@ -63,10 +63,6 @@
             android:label="User">
         </activity>
 
-        <activity
-            android:name="com.example.go4lunch.ui.list.ListActivity"
-            android:label="List">
-        </activity>
 
         <!-- Déclaration de ResetPasswordActivity -->
         <activity

@@ -1,33 +1,26 @@
 package com.example.go4lunch.ui.list;
 
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.example.go4lunch.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.Map;
 
-public class ListActivity extends AppCompatActivity {
+public class ListViewModel extends ViewModel {
 
-    private ArrayList<String> userList = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
-    private ListView listView;
+    private final MutableLiveData<ArrayList<String>> userList;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
-
-        listView = findViewById(R.id.list_view);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userList);
-        listView.setAdapter(adapter);
-
+    public ListViewModel() {
+        userList = new MutableLiveData<>();
         getUsers();
+    }
+
+    public LiveData<ArrayList<String>> getUserList() {
+        return userList;
     }
 
     private void getUsers() {
@@ -36,12 +29,13 @@ public class ListActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        ArrayList<String> tempList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Object> userData = document.getData();
                             String name = userData.get("firstName") + " " + userData.get("lastName");
-                            userList.add(name);
+                            tempList.add(name);
                         }
-                        adapter.notifyDataSetChanged();
+                        userList.setValue(tempList);
                     } else {
                         // Handle failure
                     }
