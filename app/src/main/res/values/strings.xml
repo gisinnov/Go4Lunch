@@ -29,4 +29,6 @@
 
     <!-- UserActivity strings -->
     <string name="menu_user">User</string>
+    <string name="menu_listr">List</string>
+
 </resources>
