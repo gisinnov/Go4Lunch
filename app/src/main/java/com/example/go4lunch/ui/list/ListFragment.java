@@ -4,31 +4,34 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.go4lunch.R;
+import com.example.go4lunch.databinding.FragmentListBinding;
 
 public class ListFragment extends Fragment {
 
-    private ArrayAdapter<String> adapter;
+    private FragmentListBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_list, container, false);
-        ListView listView = root.findViewById(R.id.list_view);
+        ListViewModel listViewModel =
+                new ViewModelProvider(this).get(ListViewModel.class);
 
-        ListViewModel listViewModel = new ViewModelProvider(this).get(ListViewModel.class);
+        binding = FragmentListBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        listViewModel.getUserList().observe(getViewLifecycleOwner(), userList -> {
-            adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, userList);
-            listView.setAdapter(adapter);
-        });
-
+        final TextView textView = binding.textList;
+        listViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
