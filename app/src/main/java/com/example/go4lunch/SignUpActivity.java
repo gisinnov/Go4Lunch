@@ -2,8 +2,10 @@ package com.example.go4lunch;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,16 @@ public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private AuthViewModel viewModel;
     private Uri imageUri;
+
+    private void openImageSourceChooser() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Intent chooser = Intent.createChooser(galleryIntent, "Choisissez une source");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{cameraIntent});
+
+        startActivityForResult(chooser, PICK_IMAGE_REQUEST);
+    }
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -57,10 +69,15 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         binding.btnPickImage.setOnClickListener(v -> {
-            if (Permissions.hasStoragePermission(this)) {
-                openFileChooser();
+            if (Permissions.hasStoragePermission(this) && Permissions.hasCameraPermission(this)) {
+                openImageSourceChooser();
             } else {
-                Permissions.requestStoragePermission(this);
+                if (!Permissions.hasCameraPermission(this)) {
+                    Permissions.requestCameraPermission(this);
+                }
+                if (!Permissions.hasStoragePermission(this)) {
+                    Permissions.requestStoragePermission(this);
+                }
             }
         });
 
@@ -81,22 +98,21 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            Picasso.get().load(imageUri).into(binding.profileImage);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Permissions.STORAGE_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openFileChooser();
-            } else {
-                Toast.makeText(this, "Storage permission is required", Toast.LENGTH_SHORT).show();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            if (data != null) {
+                imageUri = data.getData();
+                if (imageUri != null) {
+                    Picasso.get().load(imageUri).into(binding.profileImage);
+                } else if (data.getExtras() != null) {
+                    // Si l'utilisateur a pris une photo avec l'appareil photo, elle est stockée dans les extras sous la clé "data"
+                    Bundle extras = data.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    binding.profileImage.setImageBitmap(imageBitmap);
+                }
             }
         }
     }
+
+
 
 }
