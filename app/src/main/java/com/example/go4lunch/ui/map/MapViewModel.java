@@ -1,20 +1,29 @@
 package com.example.go4lunch.ui.map;
 
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import com.google.android.gms.maps.model.LatLng;
 
-public class MapViewModel extends ViewModel {
+import java.util.Arrays;
+import java.util.List;
 
-    private final MutableLiveData<String> mText;
-
-    public MapViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is map fragment");
+public class MapViewModel {
+    public List<LatLng> getRestaurantPositions() {
+        return Arrays.asList(
+                new LatLng(43.5512114, 7.0181816),  // Coordinates for restaurant 1
+                new LatLng(43.5531088, 7.0187543),  // Coordinates for restaurant 2
+                new LatLng(43.5531171, 7.0209806),  // Coordinates for restaurant 3
+                new LatLng(43.552602,  7.0197695),  // Coordinates for restaurant 4
+                new LatLng(43.5508205, 7.0235123)   // Coordinates for restaurant 5
+        );
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<String> getRestaurantNames() {
+        return Arrays.asList(
+                "Fouquet's Cannes",
+                "La Cantina Cannes",
+                "Le grain de sel",
+                "L'épicurieux",
+                "Restaurant EricKa"
+        );
     }
 }

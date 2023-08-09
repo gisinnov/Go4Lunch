@@ -30,5 +30,8 @@
     <!-- UserActivity strings -->
     <string name="menu_user">User</string>
     <string name="menu_listr">List</string>
+    <string name="map_content_description">Map displaying restaurant locations</string>
+
+
 
 </resources>

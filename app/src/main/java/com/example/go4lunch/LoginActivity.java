@@ -19,6 +19,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Cacher l'ActionBar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         binding.btnLogin.setOnClickListener(v -> {

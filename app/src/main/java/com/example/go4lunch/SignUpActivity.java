@@ -26,6 +26,11 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Cacher l'ActionBar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         binding.btnSignUp.setOnClickListener(v -> {
