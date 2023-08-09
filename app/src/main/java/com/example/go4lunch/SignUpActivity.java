@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private AuthViewModel viewModel;
-    private Uri imageUri; // Ajouté pour stocker l'URI de l'image
+    private Uri imageUri;
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -26,7 +26,6 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Cacher l'ActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -41,32 +40,31 @@ public class SignUpActivity extends AppCompatActivity {
 
             viewModel.register(firstName, lastName, email, password);
             viewModel.getIsRegistrationSuccessful().observe(this, isSuccessful -> {
-                if (isSuccessful && imageUri != null) {
-                    String userId = viewModel.getCurrentUserId();
-                    viewModel.uploadProfilePicture(imageUri, userId);
+                if (isSuccessful) {
+                    if (imageUri != null) {
+                        String userId = viewModel.getCurrentUserId();
+                        viewModel.uploadProfilePicture(imageUri, userId);
+                    }
+                    Toast.makeText(SignUpActivity.this, "Inscription réussie!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Échec de l'inscription", Toast.LENGTH_SHORT).show();
                 }
             });
 
-            viewModel.getIsImageUploadSuccessful().observe(this, isSuccessful -> {
-                if (isSuccessful) {
-                    Toast.makeText(SignUpActivity.this, "Image et utilisateur enregistrés avec succès", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SignUpActivity.this, "Échec du téléchargement de l'image", Toast.LENGTH_SHORT).show();
-                }
-            });
         });
 
         binding.btnPickImage.setOnClickListener(v -> {
-            if (Permissions.hasCameraPermission(this)) {
+            if (Permissions.hasStoragePermission(this)) {
                 openFileChooser();
             } else {
-                Permissions.requestCameraPermission(this);
+                Permissions.requestStoragePermission(this);
             }
         });
 
-        // Set click listener for the "Already have an account?" text view
         binding.tvSignIn.setOnClickListener(v -> {
-            // Start LoginActivity
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
         });
@@ -84,20 +82,21 @@ public class SignUpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData(); // Enregistrez l'URI de l'image pour une utilisation ultérieure
-            Picasso.get().load(imageUri).into(binding.profileImage); // Affichez l'image dans votre ImageView
+            imageUri = data.getData();
+            Picasso.get().load(imageUri).into(binding.profileImage);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Permissions.CAMERA_PERMISSION_REQUEST_CODE) {
+        if (requestCode == Permissions.STORAGE_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openFileChooser();
             } else {
-                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Storage permission is required", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 }
