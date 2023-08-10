@@ -124,12 +124,43 @@ public class AuthViewModel extends ViewModel {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        isGoogleSignInSuccessful.setValue(true);
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            // Check if user data already exists in Firestore
+                            firestore.collection("users").document(user.getUid()).get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (!documentSnapshot.exists()) {
+                                            // If user data doesn't exist, save it
+                                            Map<String, Object> userData = new HashMap<>();
+                                            userData.put("firstName", user.getDisplayName()); // You might want to split this if needed
+                                            userData.put("lastName", ""); // As Google might not provide last name separately
+                                            userData.put("email", user.getEmail());
+                                            if (user.getPhotoUrl() != null) {
+                                                userData.put("imageUrl", user.getPhotoUrl().toString());
+                                            }
+
+                                            firestore.collection("users").document(user.getUid())
+                                                    .set(userData)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        isGoogleSignInSuccessful.setValue(true);
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        isGoogleSignInSuccessful.setValue(false);
+                                                    });
+                                        } else {
+                                            // If user data already exists, just post success
+                                            isGoogleSignInSuccessful.setValue(true);
+                                        }
+                                    });
+                        } else {
+                            isGoogleSignInSuccessful.setValue(false);
+                        }
                     } else {
                         isGoogleSignInSuccessful.setValue(false);
                     }
                 });
     }
+
 
 
     public void uploadProfilePicture(Uri imageUri, String userId) {
