@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -11,6 +12,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import android.net.Uri;
 
@@ -27,12 +31,19 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isImageUploadSuccessful = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoginSuccessful = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> isGoogleSignInSuccessful = new MutableLiveData<>();
+
+
     public AuthViewModel() {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
     }
 
+
+    public LiveData<Boolean> getIsGoogleSignInSuccessful() {
+        return isGoogleSignInSuccessful;
+    }
     public LiveData<Boolean> getIsRegistrationSuccessful() {
         return isRegistrationSuccessful;
     }
@@ -104,6 +115,18 @@ public class AuthViewModel extends ViewModel {
                         // Email sent
                     } else {
                         // Handle failure
+                    }
+                });
+    }
+
+    public void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        isGoogleSignInSuccessful.setValue(true);
+                    } else {
+                        isGoogleSignInSuccessful.setValue(false);
                     }
                 });
     }
