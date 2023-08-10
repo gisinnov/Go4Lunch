@@ -26,7 +26,7 @@
     <!-- MapFragment -->
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.example.go4lunch.ui.map.MapFragment"
+        android:name="com.example.go4lunch.viewmodel.MapFragment"
         android:label="Map View"
         tools:layout="@layout/fragment_map" />
 
@@ -46,7 +46,7 @@
     <!-- NotificationsFragment -->
     <fragment
         android:id="@+id/nav_list"
-        android:name="com.example.go4lunch.ui.list.ListFragment"
+        android:name="com.example.go4lunch.viewmodel.ListFragment"
         android:label="List"
         tools:layout="@layout/fragment_list" />
     <!-- UserActivity -->
